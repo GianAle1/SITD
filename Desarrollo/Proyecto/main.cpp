@@ -9,7 +9,6 @@
 #include "C:/Program Files/MySQL/MySQL Server 8.0/include/mysqld_error.h"
 #include <mysql.h>
 
-
 using namespace std;
 MYSQL* establecerConexion() {
 	MYSQL* conexion = mysql_init(NULL);
@@ -52,8 +51,6 @@ struct Dni{
 	char numeroSolicitud[3];
 	struct Dni *sgte;
 };typedef struct Dni *TpLista;
-
-
 struct Solicitud{
 	char codigo[3];
 	int nacionalidad;
@@ -197,7 +194,7 @@ void Desencolar(TpSoli &cola){
 
 
 int GenerarDNI(int anioNacimiento){
-    // Semilla para generar números aleatorios
+    // Semilla para generar n?meros aleatorios
     srand(time(0));
     int numeroAleatorio;
     
@@ -219,7 +216,7 @@ int GenerarDNI(int anioNacimiento){
         numeroAleatorio = rand() % 2 + 6;
     }
 
-    // Generar número aleatorio de 7 cifras
+    // Generar n?mero aleatorio de 7 cifras
     int numero = rand() % 9000000 + 1000000;
 
 
@@ -282,9 +279,9 @@ void InsertarInicio(TpLista &lista, TpSoli temporal){
 	lista=q;
 }
 
-//En un futuro: Aplicar la función Quicksort para el ordenamiento
+//En un futuro: Aplicar la funci?n Quicksort para el ordenamiento
 
-//RF4-Consulta de información (GF)
+//RF4-Consulta de informaci?n (GF)
 //Se aplico busqueda secuencial
 //Se necesita aplicar busqueda binaria
 
@@ -309,11 +306,11 @@ void ImprimirDNI(TpLista lista, int dni) {
         p = p->sgte;
     }
     if (!encontrado) {
-        cout << "El DNI ingresado no se encontró en la lista." << endl;
+        cout << "El DNI ingresado no se encontr? en la lista." << endl;
     }
 }
 
-//RF4-Consulta de información (GF)
+//RF4-Consulta de informaci?n (GF)
 //muestra todos los dni
 void MostrarDNI(TpLista lista){
 	cout<<"DNI REGISTRADOS "<<endl<<endl;
@@ -337,14 +334,18 @@ void MostrarDNI(TpLista lista){
 		cout<<"Nacionalidad: "; 
 		cout<<lista->nacionalidad;
 		cout<<endl;
+		cout<<"Anio de nacimiento: "; 
+		cout<<lista->anioNacimiento;
+		cout<<endl;
 		cout<<"Direccion de su vivienda: "; 
 		cout<<lista->direccion;
 		cout<<endl;
-		cout<<"Indique su sexo: "; 
+		cout<<"Sexo: "; 
 		cout<<lista->sexo;
 		cout<<endl;
-		cout<<"Indique su estado civil: "; 
+		cout<<"Estado civil: "; 
 		cout<<lista->estado;
+		cout<<endl;
 		cout<<"--------------------------";
 		cout<<endl;
 		lista=lista->sgte;
@@ -361,23 +362,60 @@ void MostrarDNI_Resumido(TpLista lista){
 	}	
 }
 
-//RF3-Actualización de Información (Jhair)
+//Algoritmo de programacion dinamica
+int minDistanciaEdicion(const string& u, const string& v) {
+    int m = u.length();
+    int n = v.length();
+
+    // Crear una matriz de distancias
+    int dp[m + 1][n + 1];
+
+    // Inicializar la primera fila y la primera columna
+    for (int i = 0; i <= m; ++i) {
+        dp[i][0] = i;
+    }
+    for (int j = 0; j <= n; ++j) {
+        dp[0][j] = j;
+    }
+    
+    for (int i = 1; i <= m; ++i) {
+        for (int j = 1; j <= n; ++j) {
+            dp[i][j] = 0;
+        }
+    }
+    int cost;// Costo ente una sustitucion
+    // Calcular el costo de alineacion para cada posicion de la matriz
+    for (int i = 1; i <= m; ++i) {
+        for (int j = 1; j <= n; ++j) {
+            
+            if (u[i - 1] == v[j - 1]) {
+                cost = 0; // Sustitucion por letra igual costo = 0
+            } else {
+                cost = 1;// Sustitucion de letra diferente costo = 1
+            }
+            // dp[i - 1][j - 1] + cost : Sustitucion, 
+            //dp[i][j - 1] + 1 :Insercion,
+            //dp[i - 1][j] + 1 : Eliminacion
+            dp[i][j] = min(min(dp[i - 1][j - 1] + cost, dp[i][j - 1] + 1), dp[i - 1][j] + 1);
+        }
+    }
+
+    // El valor en la esquina inferior derecha es la distancia de edicion minima
+    return dp[m][n];
+}
+
+//RF3-Actualizaci?n de Informaci?n (Jhair)
 //No se debe actualizar todo (leer regla de negocio)
-void Actualizar(TpLista lista, int b, string primer_N, string  segundo_N, 
-string primer_A, string segundo_A, string lugar_Na, string nacion, 
-string  direc, string  sex, string  estad){
+void Actualizar(TpLista lista, int b, string nombreNuevo, string  direc, string  estad){
 	TpLista p=lista;
 	while(p != NULL){
 		if(p->numeroDNI == b){
-			p->primer_Nombre=primer_N;
-			p->segundo_Nombre=segundo_N;
-			p->primer_Apellido=primer_A;
-			p->segundo_Apellido=segundo_A;
-			p->lugar_Nac=lugar_Na;
-			p->nacionalidad=nacion;
 			p->direccion=direc;
-			p->sexo=sex;
 			p->estado=estad;
+			int edicionMinima = minDistanciaEdicion(p->primer_Nombre, nombreNuevo);
+			p->primer_Nombre=nombreNuevo;
+			cout << "La distancia de edicion minima es: " << edicionMinima << endl;
+			cout << "El costo por cada cambio es S/5.00 por ello pagara al Banco del Estado: S/." << edicionMinima*5 <<endl;
 		}
 		p=p->sgte;
 	}
@@ -385,7 +423,7 @@ string  direc, string  sex, string  estad){
 
 //Quicksort
 
-//Conseguir el último nodo de la lista
+//Conseguir el ?ltimo nodo de la lista
 TpLista getLastNode(TpLista head) {
     if (head == NULL)
         return NULL;
@@ -460,6 +498,53 @@ TpLista quicksort(TpLista start, TpLista end) {
     return newStart;
 }
 
+void BusquedaBinaria(TpLista lista, int low, int high, int dni) {
+    if (low > high) {
+        cout << "El DNI ingresado no se encontr? en la lista." << endl;
+        return;
+    }
+
+    int mid = low + (high - low) / 2;
+    TpLista p = lista;
+
+    // Avanzar a la posici?n 'mid' en la lista
+    for (int i = 0; i < mid; i++) {
+        p = p->sgte;
+    }
+
+    if (p->numeroDNI == dni) {
+        cout << "DNI: " << p->numeroDNI << endl;
+        cout << "Primer nombre: " << p->primer_Nombre << endl;
+        cout << "Segundo nombre: " << p->segundo_Nombre << endl;
+        cout << "Primer apellido: " << p->primer_Apellido << endl;
+        cout << "Segundo apellido: " << p->segundo_Apellido << endl;
+        cout << "Lugar nacimiento: " << p->lugar_Nac << endl;
+        cout << "Nacionalidad: " << p->nacionalidad << endl;
+        cout << "Direccion de su vivienda: " << p->direccion << endl;
+        cout << "Sexo: " << p->sexo << endl;
+        cout << "Estado civil: " << p->estado << endl;
+    } else if (dni < p->numeroDNI) {
+        BusquedaBinaria(lista, low, mid - 1, dni);
+    } else {
+        BusquedaBinaria(lista, mid + 1, high, dni);
+    }
+}
+
+bool busquedaDNI(TpLista lista, int b){
+	TpLista p=lista;
+	bool flag=false;
+	while(p != NULL){
+		if(p->numeroDNI == b){
+			flag=true;
+		}
+		p=p->sgte;
+	}
+	if(flag==false){
+		cout<<"Valor buscado "<<b<<" no existe en la lista"<<endl;
+	}
+	return flag;
+}
+
 //----------------------------------------------------
 
 void menu(){
@@ -468,22 +553,22 @@ void menu(){
 	cout<<"1.- Realizar Solicitud"<<endl;
 	cout<<"2.- Extraer Solicitud"<<endl;
 	cout<<"3.- Verficar solicitud (extranjeros)"<<endl;
-	cout<<"4.- Ordenar DNI"<<endl;
+	cout<<"4.- Mostrar DNI registrados"<< endl;
+    cout<<"5.- Actualizar informacion de un DNI"<< endl;
+	cout<<"6.- Ordenar DNI"<<endl;
+	cout<<"7.- Buscar DNI"<<endl;
 	cout<<"0.- Salir"<<endl;
 	cout<<"Ingrese Opcion---> ";
 }
 
 
 int main(){
-	
-	
 	string nac;
-	int anios;
+	int anios, cantidadElementos=0;
 	TpLista lista=NULL;
 	TpSoli pila=NULL, temporal=NULL, cola=NULL;
 	int opc, busca;
-	//No todas las variables se deben reemplazar
-	string  reempNP, reempSN, reempPA, reempSA, reempLN, reempN, reempD, reempS, reempE;
+	string reempD, reempE, reempN;
 	do{ 
 		menu();
 		cin>>opc;
@@ -499,11 +584,12 @@ int main(){
 				temporal=popSolicitud(pila);
 				VerSolicitud(pila);
 				if(temporal->nacionalidad==1){
-					cout<<"Peruano(a) pasando automáticamente a lista"<<endl;
+					cout<<"Peruano(a) pasando autom?ticamente a lista"<<endl;
 					temporal->estado=2;
 					InsertarInicio(lista,temporal);
 					cout<<"Mostrando DNI's"<<endl;
 					MostrarDNI_Resumido(lista);
+					cantidadElementos++;
 				}else{
 					cout<<"Extranjero(a) pasando a cola para revision"<<endl;
 					TrasladarCola(cola,temporal);
@@ -527,6 +613,7 @@ int main(){
 					InsertarInicio(lista,temporal);
 					cout<<"\nMostrando DNI's"<<endl;
 					MostrarDNI_Resumido(lista);
+					cantidadElementos++;
 				}else{
 					cout<<"Rechazando solicitud"<<endl;
 					Desencolar(cola);
@@ -537,7 +624,34 @@ int main(){
 				break;	
 			}
 			case 4:{
-				//No funciona
+				MostrarDNI(lista);
+            	cout << endl;
+            	system("pause");
+            	break;
+		}
+			case 5:{
+					if(lista == NULL){
+					cout<<"\nERROR.. La lista esta vacia.. no permite esta opcion "<<endl;
+				}
+				else{
+				  cout<<"\nIngresar el DNI: ";cin>>busca;
+				if(busquedaDNI(lista, busca)==true){
+				cout<<"Direccion de su vivienda: "; 
+				cin>>reempD;
+				cout<<"Estado civil: "; 
+				cin>> reempE;
+				cout<<"Nuevo nombre: "; 
+				cin>> reempN;
+				Actualizar(lista, busca, reempN, reempD, reempE);
+				 }
+				  else{
+				  	cout<<"\nERROR: No esta permitido ese valor"<<endl;
+				  }		
+				}
+				system("pause");
+				break;
+		}
+			case 6:{
 				cout<<"Lista sin ordenar"<<endl;
 				MostrarDNI_Resumido(lista);	
 				cout<<"Ordenando lista"<<endl;
@@ -546,11 +660,27 @@ int main(){
 				MostrarDNI_Resumido(lista);	
     			system("pause");
     			break;
+		}
+			case 7:{
+					if(lista == NULL){
+					cout<<"\nERROR.. La lista esta vacia.. no permite esta opcion "<<endl;
+				}
+				else{
+				cout << "Ingrese el DNI a buscar: ";
+                cin >> busca;
+                if(busquedaDNI(lista, busca)==true){
+                lista=quicksort(lista,getLastNode(lista));
+				BusquedaBinaria(lista, 0, cantidadElementos - 1, busca);}
+				else{
+					cout<<"No existe el DNI ingresado"<<endl;
+				}
+				}
+				system("pause");
+				break;
 		}//switch
 		}
 		}while(opc != 0);	
 	return 0;
 }
-
 
 
