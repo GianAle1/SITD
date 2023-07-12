@@ -16,39 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `dni`
---
-
-DROP TABLE IF EXISTS `dni`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dni` (
-  `primer_Nombre` varchar(50) DEFAULT NULL,
-  `segundo_Nombre` varchar(50) DEFAULT NULL,
-  `primer_Apellido` varchar(50) DEFAULT NULL,
-  `segundo_Apellido` varchar(50) DEFAULT NULL,
-  `anioNacimiento` int DEFAULT NULL,
-  `lugar_Nac` varchar(100) DEFAULT NULL,
-  `nacionalidad` varchar(50) DEFAULT NULL,
-  `direccion` varchar(100) DEFAULT NULL,
-  `sexo` varchar(10) DEFAULT NULL,
-  `estado` varchar(50) DEFAULT NULL,
-  `numeroDNI` int DEFAULT NULL,
-  `numeroSolicitud` varchar(50) DEFAULT NULL,
-  `DNIsgte` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dni`
---
-
-LOCK TABLES `dni` WRITE;
-/*!40000 ALTER TABLE `dni` DISABLE KEYS */;
-/*!40000 ALTER TABLE `dni` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `solicitud`
 --
 
@@ -69,7 +36,7 @@ CREATE TABLE `solicitud` (
 
 LOCK TABLES `solicitud` WRITE;
 /*!40000 ALTER TABLE `solicitud` DISABLE KEYS */;
-INSERT INTO `solicitud` VALUES ('1',1,1,'0'),('2',1,1,'0');
+INSERT INTO `solicitud` VALUES ('1',1,1,'0'),('2',1,1,'0'),('3',1,1,'0'),('4',2,1,'0'),('5',1,1,'0'),('6',1,1,'0'),('7',1,1,'0'),('8',1,1,'0'),('9',1,1,'0'),('10',1,1,'0'),('11',1,1,'0'),('12',2,1,'0');
 /*!40000 ALTER TABLE `solicitud` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -82,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-07 11:05:03
+-- Dump completed on 2023-07-11 22:19:02
