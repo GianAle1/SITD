@@ -265,6 +265,29 @@ TpLista Registrar(TpSoli temporal){
 	cout<<"11. DNI: "<<nuevo->numeroDNI<<endl;
 	cout<<endl;
 	nuevo->sgte=NULL;
+	std::string primer_NombreStr = to_string(nuevo->primer_Nombre);
+	std::string segundo_NombredStr = to_string(nuevo->segundo_Nombre);
+	std::string primer_ApellidoStr = to_string(nuevo->primer_Apellido);
+	std::string segundo_ApellidoStr = to_string(nuevo->segundo_Apellido);
+	std::string anioNacimientoStr = to_string(nuevo->anioNacimiento);
+	std::string lugar_NacStr = to_string(nuevo->lugar_Nac);
+	std::string nacionalidadStr = to_string(nuevo->nacionalidad);
+	std::string direccionStr = to_string(nuevo->direccion);
+	std::string sexoStr = to_string(nuevo->sexo);
+	std::string estadoStr = to_string(nuevo->estado);
+	std::string numeroDNIStr = to_string(nuevo->numeroDNI);
+	std::string DNIsgteStr = to_string(reinterpret_cast<long long>(nuevo->sgte));  // Convertir puntero a cadena de texto
+	MYSQL* conexion = establecerConexion();
+	if (conexion != NULL) {
+	std::string query = "INSERT INTO dni VALUES ('" + primer_NombreStr + "', '" + segundo_NombredStr + "', '" + primer_ApellidoStr + "','" + segundo_ApellidoStr + "','" + anioNacimientoStr + "','" + lugar_NacStr + "','" + nacionalidadStr + "','" + direccionStr + "','" + sexoStr + "','" + estadoStr + "','" + numeroDNIStr + "', '" + DNIsgteStr + "')";
+    cout << "Se ejecuta la conexion" << endl;
+    int resultado = mysql_query(conexion, query.c_str());
+    if (resultado != 0) {
+        cout << "Error al ejecutar la consulta: " << mysql_error(conexion) << endl;
+    } else {
+        cout << "Consulta ejecutada correctamente" << endl;
+    }
+	}
 	return nuevo;
 }
 
